@@ -9,6 +9,14 @@ int selected = 0;
 std::string autons[9] = {"Disabled", "Robot_inspection", "SentretBot", "AWP_L", "AWP_R", "TEST_1goal", "TEST_2right_go", "TEST_2right_backup", "rev12"};
 int size = 9;//*(&autons + 1) - autons;
 
+void pistonextend(){
+  piston.set_value(true);
+}
+
+void pistonretract(){
+  piston.set_value(false)
+}
+
 void autonSelector(){
   master.clear();
   pros::delay(200);
@@ -64,7 +72,7 @@ void fourbarmoverelative(double encoderTicks, double speed){
 void fourbarmoveabsolute(double position, double speed){
   FBarR.move_absolute(position, speed);
   FBarL.move_absolute(position, speed);
-}
+
 
 
 /*
