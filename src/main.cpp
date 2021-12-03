@@ -86,6 +86,12 @@ void my_task_fn(void* param) {
 		// ...
 }
 
+void my_task_fn1(void* param) {
+	std::string t =std::to_string( std::max(std::max(std::max(std::max(std::max(std::max(std::max(FrontLeft.get_temperature(), FrontRight.get_temperature()), BackLeft.get_temperature()), BackRight.get_temperature()), FBarR.get_temperature()), FBarL.get_temperature()), BRLift.get_temperature()), BLLift.get_temperature()));
+	control.print(1, 1, t.c_str());
+		delay(200);
+}
+
 
 
 
@@ -123,10 +129,10 @@ void opcontrol() {
       goalHeight--;
       liftControl->setTarget(heights[goalHeight]);
     }
-		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)) {
       fourbarmove(120);
 
-    } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+    } else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
       fourbarmove(-120);
     } else {
 			fourbarmove(0);
@@ -141,10 +147,10 @@ void opcontrol() {
 			bGoalHeight--;
 			liftControl->setTarget(heights[bGoalHeight]);
 		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
+		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)){
 			bliftmove(135);
 
-		} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+		} else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
 			bliftmove(-135);
 
 		} else {
@@ -152,4 +158,6 @@ void opcontrol() {
 		}
 		pros::delay(20);
   }
+
+
 }
