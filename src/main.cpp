@@ -108,9 +108,11 @@ void opcontrol() {
 		driverControl(2*power+turn, 2*power - turn);
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(false);
+      //pistonextend;
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			piston.set_value(true);
+      //pistonretract;
 		}
 
 
