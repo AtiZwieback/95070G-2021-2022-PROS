@@ -1,9 +1,11 @@
 #include "../include/main.h"
 #include "../include/functions.h"
 
-
+////////////////////////////////////////////
+//DO THE GEAR RATIO THINGY
+////////////////////////////////////////////////
 std::shared_ptr<AsyncPositionController<double, double>> liftControl =
-    AsyncPosControllerBuilder().withMotor({BRLift,BLLift}).build();
+    AsyncPosControllerBuilder().withMotor({BRPort,BLPort}).build();
 std::shared_ptr<AsyncPositionController<double, double>> fourbar =
     AsyncPosControllerBuilder().withMotor({FBRPort,FBLPort}).build();
 
@@ -209,11 +211,15 @@ void AWP1(){
       })
       .withOutput(driveauton)
       .buildMotionProfileController();
-driveauton->moveDistance(7_in);
-    bliftmove(100);
-    delay(100);
-     delay(1000);
-    bliftmove(100);
+      profileController2->generatePath({
+          {0_in, 0_in, 0_deg},
+          {10_in, 0_ft, 0_deg}},
+          "BOOOOOOM"
+      );
+profileController2->setTarget("BOOOOOOM", true);
+delay(2000);
+profileController2->setTarget("BOOOOOOM");
+delay(15000);
 }
 void AWP2(){
 
@@ -254,12 +260,31 @@ void AWP2(){
     .withOutput(driveauton)
     .buildMotionProfileController();
 
-    driveauton->moveDistance(-28_in);
-    bliftmove(100);
-    driveauton->moveDistance(20_in);
-    delay(300);
-    bliftmove(100);
-
+    profileController2->generatePath({
+        {0_in, 0_in, 0_deg},
+        {28_in, 0_ft, 0_deg}},
+        "scuffed_V12"
+    );
+    profileController2->generatePath({
+        {0_in, 0_in, 0_deg},
+        {5_in, 0_ft, 0_deg}},
+        "go_back"
+    );
+    profileController2->generatePath({
+        {0_in, 0_in, 0_deg},
+        {8_in, 0_ft, 0_deg}},
+        "yes"
+    );
+    piston.set_value(true);
+    profileController2->setTarget("scuffed_V12", true);
+    delay(1200);
+    profileController2->setTarget("go_back");
+    delay(500);
+    profileController2->setTarget("yes", true);
+    piston.set_value(false);
+    delay(2000);
+    profileController2->setTarget("scuffed_V12");
+    delay(15000);
 
 }
 
@@ -309,12 +334,14 @@ void TEST_GO_1() {
       {60_in, 0_in, 0_deg}},
       "retreat"
   );
-driveauton->moveDistance(-64_in);
+piston.set_value(true);
+profileController->setTarget("first_move");
+//driveauton->moveDistance(-64_in);
 delay(100);
-bliftmove(100);
+piston.set_value(false);
 delay(500);
-driveauton->moveDistance(60_in);
-bliftmove(100);
+profileController->setTarget("retreat",true);
+//bliftmove(100);
 delay(500);
 }
 
@@ -367,30 +394,36 @@ void TEST_GO_2() {
   profileController->generatePath({
     {0_ft, 0_ft, 0_deg},
     {50_in, 0_in, 0_deg}},
-    "backout"
+    "engage"
   );
   profileController->generatePath({
     {0_ft, 0_ft, 0_deg},
     {45_in, 0_in, 0_deg}},
-    "idk"
+    "eeeeee"
   );
 
 //profileController->setTarget("first_move",true);
 //bliftmove.move_relative(7500, 10);
-
-  driveauton->moveDistance(-52_in);
-  bliftmove(100);
+  piston.set_value(true);
+  profileController->setTarget("first_move", true);
+  //driveauton->moveDistance(-52_in);
+  piston.set_value(false);
   delay(300);
-  driveauton->moveDistance(40_in);
+  //driveauton->moveDistance(40_in);
+  profileController->setTarget("2ndnumogo");
   driveauton->turnAngle(-35_deg);
-  bliftmove(100);
+  piston.set_value(true);
   driveauton->turnAngle(72_deg);
   //could possibly also be 75 degrees
-  driveauton->moveDistance(-50_in);
-  bliftmove(100);
+  profileController->setTarget("engage", true);
+  piston.set_value(false);
   delay(300);
-  driveauton->moveDistance(45_in);
-  bliftmove(100);
+  profileController->setTarget("eeeeee");
+  //driveauton->moveDistance(45_in);
+  piston.set_value(true);
+  delay(1000);
+  driveauton->turnAngle(180_deg);
+  delay(15000);
 }
 
 void TEST_GO_3() {
@@ -430,26 +463,29 @@ void TEST_GO_3() {
 
   // Target location path
   profileController->generatePath({
-      {54_in, 0_in, 0_deg},
+      {38_in, 0_in, 0_deg},
       {0_ft, 0_ft, 0_deg}},
-      "first_move"
+      "first_mogo"
   );
   profileController->generatePath({
       {0_ft, 0_ft, 0_deg},
-      {50_in, 0_in, 0_deg}},
-      "run_home"
+      {10_in, 0_in, 0_deg}},
+      "mogonom2"
   );
-
-  driveauton->moveDistance(-52_in);
-  bliftmove(100);
+  profileController->generatePath({
+      {0_ft, 0_ft, 0_deg},
+      {10_in, 0_in, 0_deg}},
+      "eee"
+  );
+  piston.set_value(true);
+  profileController->setTarget("first_mogo", true);
+  piston.set_value(false);
   delay(300);
-  driveauton->moveDistance(38_in);
-  driveauton->turnAngle(-35_deg);
-  bliftmove(100);
-  driveauton->turnAngle(75_deg);
-  driveauton->moveDistance(-47_in);
-  bliftmove(100);
+  driveauton->turnAngle(225_deg);
   delay(300);
-  driveauton->moveDistance(40_in);
-  bliftmove(100);
+  profileController->setTarget("mogonom2");
+  delay(1000);
+  bliftmove(500);
+  profileController->setTarget("eee", true);
+  delay(15000);
 }
