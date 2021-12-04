@@ -1,5 +1,5 @@
-#include "../include/main.h"
-#include  "../include/autonomous.h"
+#include "main.h"
+#include  "autonomous.h"
 
 
 
@@ -22,7 +22,7 @@ void initialize() {
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
 	BRLift.set_brake_mode(MOTOR_BRAKE_HOLD);
 	BLLift.set_brake_mode(MOTOR_BRAKE_HOLD);
-	piston.set_value(true);
+	piston.set_value(false);
 	//set to false if default position is the same
 
   autonSelector();
@@ -109,9 +109,19 @@ void opcontrol() {
 	double prevl = 0;
   while (true){
 		Task my_task(my_task_fn);
+		Task my_task(my_task_fn1);
 		double power = -control.get_analog(ANALOG_LEFT_Y);
 		double turn = -control.get_analog(ANALOG_LEFT_X);
-		driverControl(2*power+turn, 2*power - turn);
+		driverControl(2*power+turn, 2*power-turn);
+
+		if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
+			driverControl(2*power+turn, 2*power - turn);
+		}
+
+		if (control.get_digital(E_CONTROLLER_DIGITAL_A)){
+			driverControl1(power + turn, power - turn);
+		}
+		
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(false);
       //pistonextend;
@@ -137,13 +147,11 @@ void opcontrol() {
     } else {
 			fourbarmove(0);
 		}
-    pros::delay(20);
-  }
 
 		if(LUp.changedToPressed() && bGoalHeight < NUM_HEIGHTS-1){
 			bGoalHeight++;
 			liftControl->setTarget(heights[bGoalHeight]);
-		} else if (LDown.changedToPressed() && bGoalHeight > 0){
+		} else if (LDown.changedToPressed() && bGoalHeight > 0) {
 			bGoalHeight--;
 			liftControl->setTarget(heights[bGoalHeight]);
 		}
@@ -158,4 +166,7 @@ void opcontrol() {
 		}
 		pros::delay(20);
   }
+	if (control.get_digital(E_CONTROLLER_DIGITAL_A)) {
+
+	}
 }

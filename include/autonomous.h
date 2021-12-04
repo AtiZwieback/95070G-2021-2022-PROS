@@ -1,5 +1,5 @@
-#include "../include/main.h"
-#include "../include/functions.h"
+#include "main.h"
+#include "functions.h"
 
 ////////////////////////////////////////////
 //DO THE GEAR RATIO THINGY

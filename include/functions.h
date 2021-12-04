@@ -14,7 +14,7 @@ void pistonextend(){
 }
 
 void pistonretract(){
-  piston.set_value(false)
+  piston.set_value(false);
 }
 
 void autonSelector(){
@@ -42,11 +42,17 @@ void autonSelector(){
 
 void driverControl(double l, double r){
   //Calculates speed of wheels for driver control
-
 	FrontLeft.move_velocity(l);
 	FrontRight.move_velocity(r);
 	BackLeft.move_velocity(l);
 	BackRight.move_velocity(r);
+}
+
+void driverControl1(double l, double r){
+  FrontLeft.move_velocity(l);
+  FrontRight.move_velocity(r);
+  BackLeft.move_velocity(l);
+  BackRight.move_velocity(r);
 }
 
 void bliftmove(double speed){
