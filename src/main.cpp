@@ -118,13 +118,18 @@ void opcontrol() {
 			driverControl(2*power+turn, 2*power - turn);
 		}
 
-		if (control.get_digital(E_CONTROLLER_DIGITAL_A)){
-			driverControl1(power + turn, power - turn);
+		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+			driverControl2(power/2 + turn, power/2 - turn);
 		}
 
-		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
-			drivercontrol2(power/2 + turn, power/2 - turn);
+		if(control.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
+			driverControl(-power-turn,-power+turn);
 		}
+
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+			driverControl(-2*power-turn, -2*power+turn)
+		}
+
 
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(false);
@@ -133,6 +138,10 @@ void opcontrol() {
 		if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
 			piston.set_value(true);
       //pistonretract;
+		}
+
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+
 		}
 
 
