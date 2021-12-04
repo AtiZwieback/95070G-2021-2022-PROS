@@ -123,14 +123,11 @@ void opcontrol() {
     }
 		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
       fourbarmove(120);
-
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
-      fourbarmove(-120);
+      fourbarmove(-90);
     } else {
 			fourbarmove(0);
 		}
-    pros::delay(20);
-  }
 
 		if(LUp.changedToPressed() && bGoalHeight < NUM_HEIGHTS-1){
 			bGoalHeight++;
@@ -140,13 +137,13 @@ void opcontrol() {
 			liftControl->setTarget(heights[bGoalHeight]);
 		}
 		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
-			bliftmove(135);
-
-		} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 			bliftmove(-135);
+		} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+			bliftmove(135);
 
 		} else {
 			bliftmove(0);
 		}
 		pros::delay(20);
+	}
 }
