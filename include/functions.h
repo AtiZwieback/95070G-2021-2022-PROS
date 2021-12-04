@@ -48,11 +48,11 @@ void driverControl(double l, double r){
 	BackRight.move_velocity(r);
 }
 
-void driverControl1(double l, double r){
-  FrontLeft.move_velocity(l);
-  FrontRight.move_velocity(r);
-  BackLeft.move_velocity(l);
-  BackRight.move_velocity(r);
+void driverControl1(double l1, double r1){
+  FrontLeft.move_velocity(l1);
+  FrontRight.move_velocity(r1);
+  BackLeft.move_velocity(l1);
+  BackRight.move_velocity(r1);
 }
 
 void bliftmove(double speed){
