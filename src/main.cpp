@@ -114,6 +114,10 @@ void opcontrol() {
 		double turn = -control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
 
+		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+			fourbarmoveabsolute(1000,40);
+		}
+
 		if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
 			driverControl(2*power+turn, 2*power - turn);
 		}
@@ -126,8 +130,8 @@ void opcontrol() {
 			driverControl(-power-turn,-power+turn);
 		}
 
-		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-			driverControl(-2*power-turn, -2*power+turn)
+		if(control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
+			driverControl(-2*power-turn, -2*power+turn);
 		}
 
 
@@ -139,11 +143,6 @@ void opcontrol() {
 			piston.set_value(true);
       //pistonretract;
 		}
-
-		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
-
-		}
-
 
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
       goalHeight++;
