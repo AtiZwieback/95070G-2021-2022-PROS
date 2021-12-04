@@ -109,7 +109,7 @@ void opcontrol() {
 	double prevl = 0;
   while (true){
 		Task my_task(my_task_fn);
-		Task my_task(my_task_fn1);
+		Task my_task1(my_task_fn1);
 		double power = -control.get_analog(ANALOG_LEFT_Y);
 		double turn = -control.get_analog(ANALOG_LEFT_X);
 		driverControl(2*power+turn, 2*power-turn);
@@ -121,7 +121,11 @@ void opcontrol() {
 		if (control.get_digital(E_CONTROLLER_DIGITAL_A)){
 			driverControl1(power + turn, power - turn);
 		}
-		
+
+		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
+			drivercontrol2(power/2 + turn, power/2 - turn);
+		}
+
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(false);
       //pistonextend;
@@ -166,7 +170,3 @@ void opcontrol() {
 		}
 		pros::delay(20);
   }
-	if (control.get_digital(E_CONTROLLER_DIGITAL_A)) {
-
-	}
-}
