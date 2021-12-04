@@ -489,3 +489,11 @@ void TEST_GO_3() {
   profileController->setTarget("eee", true);
   delay(15000);
 }
+
+void TEST_GO_4() {
+  const double MOVE_FEET = 100;
+  auto drive = [MOVE_FEET](double dist){driverControl(MOVE_FEET*dist, MOVE_FEET*dist);};
+  bliftmove(500);
+  drive(5);
+  bliftmove(-500);
+}

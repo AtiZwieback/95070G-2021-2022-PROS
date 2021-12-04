@@ -1,7 +1,8 @@
 #include "../include/main.h"
 #include  "../include/autonomous.h"
 
-
+#include <vector>
+#include <algorithm>
 
 void leftBtn(){
 
@@ -40,7 +41,7 @@ void autonomous() {
 		disabledAuton();
 		break;
     case 1:
-	  Robot_inspection();
+	    Robot_inspection();
 		break;
     case 2:
 		Drive();
@@ -58,7 +59,7 @@ void autonomous() {
 		TEST_GO_2();
 		break;
     case 7:
-		TEST_GO_3();
+		TEST_GO_4();
 		break;
 	case 8:
 		skills();
@@ -73,17 +74,27 @@ const int height1 = 0;
 const int height2 = 700;
 const int height3 = 1500;
 
-
 const int heights[NUM_HEIGHTS] = {height1, height2,height3};
 const int heights2[NUM_HEIGHTS] = {0, 700,1800};
 
+constexpr int BACK_LIFT_VAL = 120;
+
 int x = 0;
 
-void my_task_fn(void* param) {
-	std::string t =std::to_string( (FrontLeft.get_temperature()+FrontRight.get_temperature()+ BackLeft.get_temperature()+ BackRight.get_temperature()+FBarR.get_temperature()+ FBarL.get_temperature()+ BRLift.get_temperature()+ BLLift.get_temperature())/8);
-	control.print(1, 1, t.c_str());
-		delay(200);
-		// ...
+double GetMaxTemperature() {
+	std::vector<double> temps;
+	temps.push_back(FrontLeft.get_temperature());
+	temps.push_back(BackLeft.get_temperature());
+	temps.push_back(BackRight.get_temperature());
+	temps.push_back(BackLeft.get_temperature());
+	temps.push_back(FBarL.get_temperature());
+	temps.push_back(FBarR.get_temperature());
+	temps.push_back(BLLift.get_temperature());
+	temps.push_back(BRLift.get_temperature());
+	double max_temp = *max_element(temps.begin(), temps.end());
+	std::string s = "MaxTemp: " + std::to_string(max_temp);
+	control.print(1, 1, s.c_str());
+	return max_temp;
 }
 
 
@@ -97,21 +108,23 @@ void opcontrol() {
 	FBarL.set_brake_mode(MOTOR_BRAKE_HOLD);
 	FBarR.set_brake_mode(MOTOR_BRAKE_HOLD);
   //piston.set_value(true);
-  int goalHeight = 0;
+  	int goalHeight = 0;
 	int bGoalHeight = 0;
 	double prevr = 0;
 	double prevl = 0;
+	int back_lift_offset = 0;
   while (true){
-		Task my_task(my_task_fn);
-		double power = -control.get_analog(ANALOG_LEFT_Y);
-		double turn = -control.get_analog(ANALOG_LEFT_X);
-		driverControl(2*power+turn, 2*power - turn);
-		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
-			piston.set_value(false);
-		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
-			piston.set_value(true);
-		}
+	// Task my_task(my_task_fn);
+	GetMaxTemperature();
+	double power = -control.get_analog(ANALOG_LEFT_Y);
+	double turn = -control.get_analog(ANALOG_LEFT_X);
+	driverControl(2*power+turn, 2*power - turn);
+	if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
+		piston.set_value(false);
+	}
+	if (control.get_digital(E_CONTROLLER_DIGITAL_B)){
+		piston.set_value(true);
+	}
 
 
     if (RUp.changedToPressed() && goalHeight < NUM_HEIGHTS - 1) {
@@ -121,29 +134,28 @@ void opcontrol() {
       goalHeight--;
       liftControl->setTarget(heights[goalHeight]);
     }
-		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
+	if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
       fourbarmove(120);
     } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
       fourbarmove(-90);
     } else {
-			fourbarmove(0);
-		}
-
-		if(LUp.changedToPressed() && bGoalHeight < NUM_HEIGHTS-1){
-			bGoalHeight++;
-			liftControl->setTarget(heights[bGoalHeight]);
-		} else if (LDown.changedToPressed() && bGoalHeight > 0){
-			bGoalHeight--;
-			liftControl->setTarget(heights[bGoalHeight]);
-		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
-			bliftmove(-135);
-		} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
-			bliftmove(135);
-
-		} else {
-			bliftmove(0);
-		}
-		pros::delay(20);
+		fourbarmove(0);
 	}
+
+	if(LUp.changedToPressed() && bGoalHeight < NUM_HEIGHTS-1){
+		bGoalHeight++;
+		liftControl->setTarget(heights[bGoalHeight]);
+	} else if (LDown.changedToPressed() && bGoalHeight > 0){
+		bGoalHeight--;
+		liftControl->setTarget(heights[bGoalHeight]);
+	}
+	if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
+		bliftmove(-BACK_LIFT_VAL);
+	} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+		bliftmove(BACK_LIFT_VAL);
+	} else {
+		bliftmove(0);
+	}
+	pros::delay(20);
+  }
 }
