@@ -9,7 +9,7 @@ const double wheelCircumfrence = 2.75 * M_PI;
 std::vector<std::string> autons{"Disabled", "Robot_inspection", "SentretBot", "AWP_L", "AWP_R", 
                           "Auto_go_mid", "Auto_go_front", "Auto_turn_left", "Auto_go_front_2Inx"};
 int size = autons.size();//*(&autons + 1) - autons;
-int selected = 7 < autons.size()? 7 : autons.size()-1;
+int selected = 2 < autons.size()? 2 : autons.size()-1;
 void autonSelector(){
   master.clear();
   pros::delay(200);

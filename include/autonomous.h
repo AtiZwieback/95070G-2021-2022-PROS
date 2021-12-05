@@ -493,8 +493,6 @@ void TEST_GO_3() {
 void AUTO_BACK() {
   const double MOVE_INCH = -109; // move forward
   auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
-  auto bllift_pos = BLLift.get_position();
-  auto brlift_pos = BRLift.get_position();
 
   bliftmove_relative(3520, 120); // move down
   delay(1000);
@@ -509,8 +507,6 @@ void AUTO_BACK() {
 void AutoGoMid() {
   const double MOVE_INCH = -109; // move forward
   auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
-  auto bllift_pos = BLLift.get_position();
-  auto brlift_pos = BRLift.get_position();
   piston.set_value(false);
   delay(100);
   drive(64, 200); // move X inch
@@ -530,8 +526,6 @@ void AutoGoMid() {
 void AutoTurnLeft() {
   const double MOVE_INCH = -109; // move forward
   auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
-  auto bllift_pos = BLLift.get_position();
-  auto brlift_pos = BRLift.get_position();
   BotTurnRelative(450, 200);
   piston.set_value(false);
   delay(500);
@@ -552,9 +546,6 @@ void AutoTurnLeft() {
 void AutoGoFront() {
   const double MOVE_INCH = -109; // move forward
   auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
-  auto bllift_pos = BLLift.get_position();
-  auto brlift_pos = BRLift.get_position();
-
   piston.set_value(false);
   drive(40, 200); // move X inch
   delay(2000);
@@ -573,9 +564,6 @@ void AutoGoFront() {
 void AutoGoFront1In() {
   const double MOVE_INCH = -109; // move forward
   auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
-  auto bllift_pos = BLLift.get_position();
-  auto brlift_pos = BRLift.get_position();
-
   piston.set_value(false);
   drive(41, 200); // move X inch
   delay(2000);
