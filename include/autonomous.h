@@ -490,10 +490,103 @@ void TEST_GO_3() {
   delay(15000);
 }
 
-void TEST_GO_4() {
-  const double MOVE_FEET = 100;
-  auto drive = [MOVE_FEET](double dist){driverControl(MOVE_FEET*dist, MOVE_FEET*dist);};
-  bliftmove(500);
-  drive(5);
-  bliftmove(-500);
+void AUTO_BACK() {
+  const double MOVE_INCH = -109; // move forward
+  auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
+  auto bllift_pos = BLLift.get_position();
+  auto brlift_pos = BRLift.get_position();
+
+  bliftmove_relative(3520, 120); // move down
+  delay(1000);
+  drive(-42, 180); // move X inch
+  delay(3000);
+  bliftmove_relative(-2000, 120); // move up
+  delay(2000);
+  drive(35, 180); // move X inch
+
+}
+
+void AutoGoMid() {
+  const double MOVE_INCH = -109; // move forward
+  auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
+  auto bllift_pos = BLLift.get_position();
+  auto brlift_pos = BRLift.get_position();
+  piston.set_value(false);
+  delay(100);
+  drive(64, 200); // move X inch
+  delay(4000);
+  drive(1, 100); // move X inch
+  delay(500);
+  piston.set_value(true);
+  delay(100);
+  fourbarmoverelative(150,200);
+  delay(500);
+  drive(-50, 200); // move X inch
+  delay(3000);
+  fourbarmoverelative(-150,200);
+  piston.set_value(false);
+}
+
+void AutoTurnLeft() {
+  const double MOVE_INCH = -109; // move forward
+  auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
+  auto bllift_pos = BLLift.get_position();
+  auto brlift_pos = BRLift.get_position();
+  BotTurnRelative(450, 200);
+  piston.set_value(false);
+  delay(500);
+  drive(58, 200); // move X inch
+  delay(3000);
+  drive(1, 100); // move X inch
+  delay(500);
+  piston.set_value(true);
+  delay(100);
+  fourbarmoverelative(150,200);
+  delay(500);
+  drive(-50, 200); // move X inch
+  delay(3000);
+  fourbarmoverelative(-150,200);
+  piston.set_value(false);
+}
+
+void AutoGoFront() {
+  const double MOVE_INCH = -109; // move forward
+  auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
+  auto bllift_pos = BLLift.get_position();
+  auto brlift_pos = BRLift.get_position();
+
+  piston.set_value(false);
+  drive(40, 200); // move X inch
+  delay(2000);
+  drive(1, 100); // move X inch
+  delay(500);
+  piston.set_value(true);
+  delay(100);
+  fourbarmoverelative(150,200);
+  delay(500);
+  drive(-35, 200); // move X inch
+  delay(3000);
+  fourbarmoverelative(-150,200);
+  piston.set_value(false);
+}
+
+void AutoGoFront1In() {
+  const double MOVE_INCH = -109; // move forward
+  auto drive = [MOVE_INCH](double dist, double vel){BotMoveRelative(MOVE_INCH*dist, vel);};
+  auto bllift_pos = BLLift.get_position();
+  auto brlift_pos = BRLift.get_position();
+
+  piston.set_value(false);
+  drive(41, 200); // move X inch
+  delay(2000);
+  drive(1, 100); // move X inch
+  delay(500);
+  piston.set_value(true);
+  delay(100);
+  fourbarmoverelative(150,200);
+  delay(500);
+  drive(-35, 200); // move X inch
+  delay(3000);
+  fourbarmoverelative(-150,200);
+  piston.set_value(false);
 }

@@ -5,10 +5,11 @@ okapi::Controller master;
 //Useful Constants
 const double wheelCircumfrence = 2.75 * M_PI;
 
-int selected = 2;
-std::string autons[9] = {"Disabled", "Robot_inspection", "SentretBot", "AWP_L", "AWP_R", "TEST_1goal", "TEST_2right_go", "TEST_2right_backup", "rev14"};
-int size = 9;//*(&autons + 1) - autons;
 
+std::vector<std::string> autons{"Disabled", "Robot_inspection", "SentretBot", "AWP_L", "AWP_R", 
+                          "Auto_go_mid", "Auto_go_front", "Auto_turn_left", "Auto_go_front_2Inx"};
+int size = autons.size();//*(&autons + 1) - autons;
+int selected = 7 < autons.size()? 7 : autons.size()-1;
 void autonSelector(){
   master.clear();
   pros::delay(200);
@@ -46,9 +47,14 @@ void bliftmove(double speed){
   BRLift.move(speed);
 }
 
-void bliftmoverelative(double encoderTicks, double speed){
+void bliftmove_relative(double encoderTicks, double speed){
   BLLift.move_relative(encoderTicks,speed);
   BRLift.move_relative(encoderTicks,speed);
+}
+
+void bliftmove_absolute(double abs_pos, double speed){
+  BLLift.move_absolute(abs_pos, speed);
+  BRLift.move_absolute(abs_pos, speed);
 }
 
 void fourbarmove(double speed){
@@ -66,6 +72,35 @@ void fourbarmoveabsolute(double position, double speed){
   FBarL.move_absolute(position, speed);
 }
 
+void BotMoveAboslute(double pos, int velocity){
+	FrontLeft.move_absolute(pos, velocity);
+	FrontRight.move_absolute(pos, velocity);
+	BackLeft.move_absolute(pos, velocity);
+	BackRight.move_absolute(pos, velocity);
+}
+
+void BotMoveRelative(double pos, int velocity){
+	FrontLeft.move_relative(pos, velocity);
+	FrontRight.move_relative(pos, velocity);
+	BackLeft.move_relative(pos, velocity);
+	BackRight.move_relative(pos, velocity);
+}
+
+// + pos -> Turn left
+void BotTurnAboslute(double pos, int velocity){
+	FrontLeft.move_absolute(pos, velocity);
+	BackLeft.move_absolute(pos, velocity);
+	FrontRight.move_absolute(-pos, velocity);
+	BackRight.move_absolute(-pos, velocity);
+}
+
+// + pos -> Turn left
+void BotTurnRelative(double pos, int velocity){
+	FrontLeft.move_relative(pos, velocity);
+	BackLeft.move_relative(pos, velocity);
+	FrontRight.move_relative(-pos, velocity);
+	BackRight.move_relative(-pos, velocity);
+}
 
 /*
 //For debugging things

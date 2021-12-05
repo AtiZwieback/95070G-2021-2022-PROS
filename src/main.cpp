@@ -53,16 +53,16 @@ void autonomous() {
 		AWP2();
 		break;
     case 5:
-		TEST_GO_1();
+		AutoGoMid();
 		break;
     case 6:
-		TEST_GO_2();
+		AutoGoFront();
 		break;
     case 7:
-		TEST_GO_4();
+		AutoTurnLeft();
 		break;
 	case 8:
-		skills();
+		AutoGoFront1In();
 		break;
 	default:
 		return;
@@ -93,12 +93,23 @@ double GetMaxTemperature() {
 	temps.push_back(BRLift.get_temperature());
 	double max_temp = *max_element(temps.begin(), temps.end());
 	std::string s = "MaxTemp: " + std::to_string(max_temp);
-	control.print(1, 1, s.c_str());
-	return max_temp;
+	control.print(0, 1, "MaxTemp: %.3f", max_temp);
+
+	 pros::lcd::print(0, "MaxTemp: %.3f", max_temp);
+//   std::string bllift_pos = std::to_string(BLLift.get_position());
+//   std::string brlift_pos = std::to_string(BRLift.get_position());
+//   std::string left = "BLift L: " + bllift_pos;
+//   std::string right = "BLift R: "+ brlift_pos;
+	pros::lcd::print(1, "BLift L: %.3f", BLLift.get_position());
+	pros::lcd::print(2, "BLift R: %.3f", BRLift.get_position());
+  control.print(1, 1, "BLift L: %.3f", BLLift.get_position());
+  control.print(2, 1, "BLift R: %.3f", BRLift.get_position());
+  return max_temp;
 }
 
+void GetBLiftPosition() {
 
-
+}
 
 void opcontrol() {
 	master.clear();
@@ -114,7 +125,6 @@ void opcontrol() {
 	double prevl = 0;
 	int back_lift_offset = 0;
   while (true){
-	// Task my_task(my_task_fn);
 	GetMaxTemperature();
 	double power = -control.get_analog(ANALOG_LEFT_Y);
 	double turn = -control.get_analog(ANALOG_LEFT_X);
