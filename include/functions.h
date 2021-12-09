@@ -86,7 +86,7 @@ void fourbarmoverelative(double encoderTicks, double speed){
 void fourbarmoveabsolute(double position, double speed){
   FBarR.move_absolute(position, speed);
   FBarL.move_absolute(position, speed);
-
+}
 
 
 /*

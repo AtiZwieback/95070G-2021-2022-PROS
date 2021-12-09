@@ -72,7 +72,8 @@ const int NUM_HEIGHTS = 3;
 const int height1 = 0;
 const int height2 = 700;
 const int height3 = 1500;
-
+double spd=-2;
+double trnspd=-1;
 
 const int heights[NUM_HEIGHTS] = {height1, height2,height3};
 const int heights2[NUM_HEIGHTS] = {0, 700,1800};
@@ -84,12 +85,6 @@ void my_task_fn(void* param) {
 	control.print(1, 1, t.c_str());
 		delay(200);
 		// ...
-}
-
-void my_task_fn1(void* param) {
-	std::string t =std::to_string( std::max(std::max(std::max(std::max(std::max(std::max(std::max(FrontLeft.get_temperature(), FrontRight.get_temperature()), BackLeft.get_temperature()), BackRight.get_temperature()), FBarR.get_temperature()), FBarL.get_temperature()), BRLift.get_temperature()), BLLift.get_temperature()));
-	control.print(1, 1, t.c_str());
-		delay(200);
 }
 
 
@@ -105,35 +100,38 @@ void opcontrol() {
   //piston.set_value(true);
   int goalHeight = 0;
 	int bGoalHeight = 0;
+	double spd = -2;
+	double trnspd = -1;
 	double prevr = 0;
 	double prevl = 0;
   while (true){
 		Task my_task(my_task_fn);
-		Task my_task1(my_task_fn1);
 		double power = -control.get_analog(ANALOG_LEFT_Y);
 		double turn = -control.get_analog(ANALOG_LEFT_X);
-		driverControl(2*power+turn, 2*power-turn);
-
+		double powerx = -control.get_analog(ANALOG_RIGHT_Y);
+		double turnx= control.get_analog(ANALOG_RIGHT_X);
+		driverControl(spd*power+trnspd*turn, spd*power-trnspd*turn);
 		if(control.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
 			fourbarmoveabsolute(1000,40);
 		}
 
-		if(control.get_digital(E_CONTROLLER_DIGITAL_Y)){
-			driverControl(2*power+turn, 2*power - turn);
-		}
+		if(control.get_digital(E_CONTROLLER_DIGITAL_A)){
+			double spd=-1;
+			double trnspd=-0.5;
 
-		if (control.get_digital(E_CONTROLLER_DIGITAL_UP)){
-			driverControl2(power/2 + turn, power/2 - turn);
-		}
+			BackRight.set_brake_mode(MOTOR_BRAKE_HOLD);
+			BackLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
+			FrontRight.set_brake_mode(MOTOR_BRAKE_HOLD);
+			FrontLeft.set_brake_mode(MOTOR_BRAKE_HOLD);
+		} else {
+			double spd = -2;
+			double trnspd = -1;
 
-		if(control.get_digital(E_CONTROLLER_DIGITAL_LEFT)){
-			driverControl(-power-turn,-power+turn);
+			BackRight.set_brake_mode(MOTOR_BRAKE_COAST);
+			BackLeft.set_brake_mode(MOTOR_BRAKE_COAST);
+			FrontRight.set_brake_mode(MOTOR_BRAKE_COAST);
+			FrontLeft.set_brake_mode(MOTOR_BRAKE_COAST);
 		}
-
-		if(control.get_digital(E_CONTROLLER_DIGITAL_RIGHT)){
-			driverControl(-2*power-turn, -2*power+turn);
-		}
-
 
 		if (control.get_digital(E_CONTROLLER_DIGITAL_X)){
 			piston.set_value(false);
@@ -151,10 +149,10 @@ void opcontrol() {
       goalHeight--;
       liftControl->setTarget(heights[goalHeight]);
     }
-		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)) {
+		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)) {
       fourbarmove(120);
 
-    } else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+    } else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
       fourbarmove(-120);
     } else {
 			fourbarmove(0);
@@ -167,14 +165,15 @@ void opcontrol() {
 			bGoalHeight--;
 			liftControl->setTarget(heights[bGoalHeight]);
 		}
-		if (control.get_digital(E_CONTROLLER_DIGITAL_L1)){
-			bliftmove(135);
-
-		} else if (control.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+		if (control.get_digital(E_CONTROLLER_DIGITAL_R1)){
 			bliftmove(-135);
+
+		} else if (control.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+			bliftmove(135);
 
 		} else {
 			bliftmove(0);
 		}
 		pros::delay(20);
   }
+}
